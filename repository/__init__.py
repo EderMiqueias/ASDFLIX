@@ -1,0 +1,1 @@
+from generoRepository import GeneroRepository
