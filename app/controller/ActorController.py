@@ -11,11 +11,15 @@ def get_actors():
     return actors
 
 
-@app.route('/actors/', methods=['POST']) #teste
+@app.route('/actors/', methods=['POST'])
 def new_actors():
-    ActorDAO.new_actor(request.form.get('nome'))
+    if request.form.get('nome'):
+        ActorDAO.new_actor(request.form.get('nome'))
+        return {
+            'status': 'Ator cadastrado com sucesso!'
+        }
     return {
-        'status': 'Ator cadastrado com sucesso!'
+        'status': 'Error'
     }
 
 

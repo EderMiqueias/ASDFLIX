@@ -13,9 +13,13 @@ def get_genres():
 
 @app.route('/genres/', methods=['POST'])
 def new_genres():
-    GenreDAO.new_genre(request.form.get('nome'))
+    if request.form.get('nome') is not None and request.form.get('nome') is str:
+        GenreDAO.new_genre(request.form.get('nome'))
+        return {
+            'status': 'Genero cadastrado com sucesso!'
+        }
     return {
-        'status': 'Genero cadastrado com sucesso!'
+        'status': 'Error'
     }
 
 
