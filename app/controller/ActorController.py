@@ -11,7 +11,7 @@ def get_actors():
     return actors
 
 
-@app.route('/actors/', methods=['POST'])
+@app.route('/actors/', methods=['POST']) #teste
 def new_actors():
     ActorDAO.new_actor(request.form.get('nome'))
     return {
