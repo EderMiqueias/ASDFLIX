@@ -13,14 +13,15 @@ def get_genres():
 
 @app.route('/genres/', methods=['POST'])
 def new_genres():
-    if request.form.get('nome') is not None and request.form.get('nome') is str:
+    if request.form.get('nome') and request.form.get('nome').isdigit() is not True:
         GenreDAO.new_genre(request.form.get('nome'))
         return {
             'status': 'Genero cadastrado com sucesso!'
         }
-    return {
-        'status': 'Error'
-    }
+    else:
+        return {
+            'status': 'Digite os campos adequadamente'
+        }
 
 
 @app.route('/genres/<int:id>/')
@@ -36,15 +37,17 @@ def get_genres_by_id(id):
 @app.route('/genres/', methods=['PUT'])
 def update_genres():
     id = request.form.get('id')
-    nome = request.form.get('nome')
-    if GenreDAO.get_genres_by_id(id):
-        newGenre = GenreVO(id, nome)
-        GenreDAO.update_genres(newGenre)
-        return {
-            'status': 'Genero atualizado!'
-        }
+    name = request.form.get('nome')
+
+    if id and name:
+        if id.isdigit() and GenreDAO.get_genres_by_id(id) and request.form.get('nome').isdigit() is not True:
+            newGenre = GenreVO(id, name)
+            GenreDAO.update_genres(newGenre)
+            return {
+                'status': 'Genero atualizado!'
+            }
     return {
-        'status': 'Nao eh possivel atualizar um genero inexistente'
+        'status': 'Nao foi possivel atualizar o genero'
     }
 
 

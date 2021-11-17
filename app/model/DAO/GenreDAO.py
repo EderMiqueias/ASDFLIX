@@ -2,9 +2,9 @@ from app.model.VO.GenreVO import GenreVO
 from app.util_db.conexao_bd import connect
 
 
-def new_genre(nome: str):
+def new_genre(name: str):
     cursor = connect.cursor()
-    query = f"INSERT INTO genres (nome) values ('{nome}')"
+    query = f"INSERT INTO genres (name) values ('{name}')"
     cursor.execute(query)
     connect.commit()
     cursor.close()
@@ -37,7 +37,7 @@ def get_genres_by_id(id):
 
 def update_genres(newGenre): # ta func apenas no navegador
     cursor = connect.cursor()
-    query = f"UPDATE genres SET nome = '{newGenre.getNome()}' where id={newGenre.getId()}"
+    query = f"UPDATE genres SET name = '{newGenre.getName()}' where id={newGenre.getId()}"
     cursor.execute(query)
     connect.commit()
     cursor.close()

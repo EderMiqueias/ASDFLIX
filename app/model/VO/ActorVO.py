@@ -1,17 +1,17 @@
 class ActorVO:
-    def __init__(self, id, nome):
+    def __init__(self, id, name):
         self.id = id
-        self.nome = nome
+        self.name = name
 
     def get_json(self):
         return dict(
             id=self.id,
-            nome=self.nome
+            nome=self.name
         )
 
     def getId(self):
         return self.id
 
-    def getNome(self):
-        return self.nome
+    def getName(self):
+        return self.name
 

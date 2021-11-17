@@ -2,9 +2,9 @@ from app.model.VO.ActorVO import ActorVO
 from app.util_db.conexao_bd import connect
 
 
-def new_actor(nome: str):
+def new_actor(name: str):
     cursor = connect.cursor()
-    query = f"INSERT INTO actors (nome) values ('{nome}')"
+    query = f"INSERT INTO actors (name) values ('{name}')"
     cursor.execute(query)
     connect.commit()
     cursor.close()
@@ -37,7 +37,7 @@ def get_actors_by_id(id):
 
 def update_actors(newActor): # ta func apenas no navegador
     cursor = connect.cursor()
-    query = f"UPDATE actors SET nome = '{newActor.getNome()}' where id={newActor.getId()}"
+    query = f"UPDATE actors SET name = '{newActor.getName()}' where id={newActor.getId()}"
     cursor.execute(query)
     connect.commit()
     cursor.close()

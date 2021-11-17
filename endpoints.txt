@@ -1,0 +1,62 @@
+Endpoints:
+
+1 Generos
+	1.1 Cadastro - POST - /genres/
+		body = {
+			'nome': 'Ação'		
+		}
+	1.2 Exibir todos - GET - /genres/
+	1.3 Buscar por Id - GET - /genres/<int:id>/
+	1.4 Atualizar Genero por id - PUT - /genres/
+		body = {
+			'id':'1',
+			'nome': 'Terror'		
+		}
+	1.5 Deletar por Id - DELETE - /genres/<int:id>/
+			
+
+2 Atores
+	2.1 Cadastro - POST - /actors/
+		body = {
+			'nome': 'James'		
+		}
+	2.2 Exibir todos - GET - /actors/
+	2.3 Buscar por Id - GET - /actors/<int:id>/
+	2.4 Atualizar Ator por id - PUT - /actors/
+		body = {
+			'id':'1',
+			'nome': 'William'		
+		}
+	2.5 Deletar por Id - DELETE - /actors/<int:id>/
+
+
+3 Filmes por Genero 
+	3.1 Exibir todos os filmes do genero por id - GET - movies/genre/<int:id>
+
+
+4 Filmes por Ator 
+	4.1 Exibir todos os filmes do ator por id - GET - movies/actor/<int:id>
+
+5 Filmes por nota IMDB
+	5.1 Exibir todos os filmes ordenados pela maior nota IMDB - GET - movies/imdb
+
+6 Filmes
+	6.1 Cadastro - POST - /movies/
+		body- {
+			'titulo': 'Filme 1', 
+			'duracao': 120, 
+			'genero': 'Terror', 
+			'imdb': 8.5
+		}
+	6.2 Exibir todos - GET - /movies/
+	6.3 Buscar por Id - GET - /movies/<int:id>/
+	6.4 Atualizar Filme por id - PUT - /movies/
+		body- {
+			'id': '1'
+			'titulo': 'Filme 1', 
+			'duracao': 120, 
+			'genero': 'Terror', 
+			'imdb': 8.5		
+		}
+	6.5 Deletar por Id - DELETE - /movies/<int:id>/
+
