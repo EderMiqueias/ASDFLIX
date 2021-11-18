@@ -103,3 +103,9 @@ def delete_movies(id):
         'status': 'Error'
     }
 
+
+@app.route('/movies/imdb')
+def get_movies_per_imdb():
+    movies = MovieDAO.get_movies_per_imdb()
+    movies = json.dumps([movie.get_json() for movie in movies])
+    return movies

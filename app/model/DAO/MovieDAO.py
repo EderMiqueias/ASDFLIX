@@ -49,3 +49,16 @@ def delete_movies(id):
     cursor.execute(query)
     connect.commit()
     cursor.close()
+
+
+def get_movies_per_imdb():
+    cursor = connect.cursor()
+    query = "select * from movies order by imdb desc;"
+    cursor.execute(query)
+    movies = []
+    data_manager = cursor.fetchone()
+    while data_manager:
+        movies.append(MovieVO(data_manager[0], data_manager[1], data_manager[2], data_manager[3], data_manager[4]))
+        data_manager = cursor.fetchone()
+    cursor.close()
+    return movies
