@@ -14,4 +14,3 @@ class ActorVO:
 
     def getName(self):
         return self.name
-

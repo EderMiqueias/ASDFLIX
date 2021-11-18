@@ -49,4 +49,3 @@ def delete_movies(id):
     cursor.execute(query)
     connect.commit()
     cursor.close()
-

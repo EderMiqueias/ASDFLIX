@@ -49,5 +49,3 @@ def delete_genres(id):
     cursor.execute(query)
     connect.commit()
     cursor.close()
-
-

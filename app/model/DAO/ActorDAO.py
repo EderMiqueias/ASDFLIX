@@ -49,4 +49,3 @@ def delete_actors(id):
     cursor.execute(query)
     connect.commit()
     cursor.close()
-
