@@ -36,3 +36,14 @@ def createTableMovie():
 
 
 createTableMovie()
+
+
+def createTableMovieActor():
+    cursor = connect.cursor()
+    table = 'CREATE TABLE IF NOT EXISTS movie_actor (id serial primary key, id_actor integer, id_movie integer)'
+    cursor.execute(table)
+    connect.commit()
+    cursor.close()
+
+
+createTableMovieActor()

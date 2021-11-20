@@ -1,8 +1,9 @@
+import sys
+
 from app import app
 from flask import json, request
-from app.model.DAO import MovieDAO
 from app.model.VO.MovieVO import MovieVO
-from app.model.DAO import GenreDAO
+from app.model.DAO import GenreDAO, ActorDAO, MovieDAO
 
 
 @app.route('/movies/')
@@ -109,3 +110,16 @@ def get_movies_per_imdb():
     movies = MovieDAO.get_movies_per_imdb()
     movies = json.dumps([movie.get_json() for movie in movies])
     return movies
+
+
+@app.route('/movies/actor/<int:id_actor>/')
+def get_movies_by_actor_id(id_actor):
+    actor = ActorDAO.get_actors_by_id(id_actor)
+    if not actor:
+        return {
+            'error': 'actor is not registered'
+        }, 401
+    print(actor.get_json(), file=sys.stdout)
+    return {
+        'status': 'Filme inexistente!'
+    }
