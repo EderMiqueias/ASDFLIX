@@ -1,5 +1,5 @@
 from app import app
-from flask import json, request
+from flask import request
 from app.model.DAO import ActorDAO
 from app.model.VO.ActorVO import ActorVO
 
@@ -7,8 +7,11 @@ from app.model.VO.ActorVO import ActorVO
 @app.route('/actors/')
 def get_actors():
     actors = ActorDAO.get_all_actors()
-    actors = json_format = json.dumps([actor.get_json() for actor in actors])
-    return actors
+    actors = [actor.get_json() for actor in actors]
+    return {
+        'message': 'success',
+        'response': actors
+    }
 
 
 @app.route('/actors/', methods=['POST'])
@@ -16,10 +19,10 @@ def new_actors():
     if request.form.get('nome') and not request.form.get('nome').isdigit():
         ActorDAO.new_actor(request.form.get('nome'))
         return {
-            'status': 'Ator cadastrado com sucesso!'
-        }
+            'message': 'Ator cadastrado com sucesso!'
+        }, 201
     return {
-        'status': 'Digite os campos adequadamente'
+        'message': 'Digite os campos adequadamente'
     }, 400
 
 
@@ -27,9 +30,12 @@ def new_actors():
 def get_actors_by_id(id):
     actor = ActorDAO.get_actors_by_id(id)
     if actor:
-        return actor.get_json()
+        return {
+            'message': 'Success!',
+            'response': actor.get_json()}
     return {
-        'status': 'Genero inexistente!'
+        'message': 'Ator inexistente!',
+        'response': {}
     }
 
 
@@ -43,11 +49,11 @@ def update_actors():
             newActor = ActorVO(id, name)
             ActorDAO.update_actors(newActor)
             return {
-                'status': 'Ator atualizado!'
+                'message': 'Ator atualizado!'
             }
     return {
-        'status': 'Nao foi possivel atualizar o ator'
-    }
+        'message': 'Nao foi possivel atualizar o ator'
+    }, 400
 
 
 @app.route('/actors/<int:id>/', methods=['DELETE'])
@@ -55,8 +61,8 @@ def delete_actors(id):
     if ActorDAO.get_actors_by_id(id):
         ActorDAO.delete_actors(id)
         return {
-            'status': 'Ator deletado!'
+            'message': 'Ator deletado!'
         }
     return {
-        'status': 'Error'
+        'message': 'Error'
     }

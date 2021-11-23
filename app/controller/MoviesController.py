@@ -1,7 +1,5 @@
-import sys
-
 from app import app
-from flask import json, request
+from flask import request
 from app.model.VO.MovieVO import MovieVO
 from app.model.DAO import GenreDAO, ActorDAO, MovieDAO
 
@@ -9,8 +7,11 @@ from app.model.DAO import GenreDAO, ActorDAO, MovieDAO
 @app.route('/movies/')
 def get_movies():
     movies = MovieDAO.get_all_movies()
-    movies = json_format = json.dumps([movie.get_json() for movie in movies])
-    return movies
+    movies = [movie.get_json() for movie in movies]
+    return {
+        'message': 'success',
+        'response': movies
+    }
 
 
 @app.route('/movies/', methods=['POST'])
@@ -25,8 +26,8 @@ def new_movies():
         if duration.isdigit() and id_genre.isdigit():
             if not GenreDAO.get_genres_by_id(id_genre):
                 return {
-                    'status': 'Genero inexistente'
-                }
+                    'message': 'Genero inexistente'
+                }, 400
             duration = int(request.form.get('duracao'))
             id_genre = int(request.form.get('id_genero'))
             try:
@@ -39,22 +40,24 @@ def new_movies():
         if validator:
             MovieDAO.new_movie(title, duration, id_genre, imdb)
             return {
-                'status': 'Filme cadastrado com sucesso!'
-            }
-    # retornar um 401
+                'message': 'Filme cadastrado com sucesso!'
+            }, 201
     return {
-        'status': 'Insira os dados corretamente!'
-    }
+        'message': 'Insira os dados corretamente!',
+    }, 400
 
 
 @app.route('/movies/<int:id>/')
 def get_movies_by_id(id):
     movie = MovieDAO.get_movies_by_id(id)
     if movie:
-        return movie.get_json()
-    # retornar um 401?
+        return {
+            'message': 'Success!',
+            'response': movie.get_json()
+        }
     return {
-        'status': 'Filme inexistente!'
+        'message': 'Filme inexistente!',
+        'response': {}
     }
 
 
@@ -71,8 +74,8 @@ def update_movies():
         if duration.isdigit() and id_genre.isdigit() and id.isdigit() and MovieDAO.get_movies_by_id(id):
             if not GenreDAO.get_genres_by_id(id_genre):
                 return {
-                    'status': 'Genero inexistente'
-                }
+                    'message': 'Genero inexistente'
+                }, 400
             duration = int(request.form.get('duracao'))
             id_genre = int(request.form.get('id_genero'))
             try:
@@ -86,11 +89,11 @@ def update_movies():
             newMovie = MovieVO(id, title, duration, id_genre, imdb)
             MovieDAO.update_movies(newMovie)
             return {
-                'status': 'Filme atualizado com sucesso!'
+                'message': 'Filme atualizado com sucesso!'
             }
     return {
-        'status': 'Nao foi possivel atualizar o filme'
-    }
+        'message': 'Nao foi possivel atualizar o filme'
+    }, 400
 
 
 @app.route('/movies/<int:id>', methods=['DELETE'])
@@ -98,18 +101,21 @@ def delete_movies(id):
     if MovieDAO.get_movies_by_id(id):
         MovieDAO.delete_movies(id)
         return {
-            'status': 'Filme deletado!'
+            'message': 'Filme deletado!'
         }
     return {
-        'status': 'Error'
+        'message': 'Erro ao deletar o filme!'
     }
 
 
 @app.route('/movies/imdb')
 def get_movies_per_imdb():
     movies = MovieDAO.get_movies_per_imdb()
-    movies = json.dumps([movie.get_json() for movie in movies])
-    return movies
+    movies = [movie.get_json() for movie in movies]
+    return {
+        'message': 'success',
+        'response': movies
+    }
 
 
 @app.route('/movies/actor/<int:id_actor>/')
@@ -117,11 +123,20 @@ def get_movies_by_actor_id(id_actor):
     actor = ActorDAO.get_actors_by_id(id_actor)
     if not actor:
         return {
-            'error': 'actor is not registered'
-        }, 400
+           'message': 'actor is not registered',
+           'response': []
+        }
     movies = MovieDAO.get_movies_by_actor_id(actor.id)
-    movies = json.dumps([movie.get_json() for movie in movies])
-    return movies
+    if not movies:
+        return {
+           'message': 'There are no movies of this actor registered',
+           'response': []
+        }
+    movies = [movie.get_json() for movie in movies]
+    return {
+        'message': 'success',
+        'response': movies
+    }
 
 
 @app.route('/movies/genre/<int:id_genre>/')
@@ -129,8 +144,18 @@ def get_movies_by_genre_id(id_genre):
     genre = GenreDAO.get_genres_by_id(id_genre)
     if not genre:
         return {
-            'error': 'genre is not registered'
-        }, 400
+            'message': 'genre is not registered',
+            'response': []
+        }
     movies = MovieDAO.get_movies_by_genre_id(genre.id)
-    movies = json.dumps([movie.get_json() for movie in movies])
-    return movies
+    if not movies:
+        return {
+            'message': 'There are no movies of this genre registered',
+            'response': []
+        }
+    movies = [movie.get_json() for movie in movies]
+    print(movies)
+    return {
+        'message': 'success',
+        'response': movies
+    }

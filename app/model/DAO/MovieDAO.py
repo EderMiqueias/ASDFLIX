@@ -77,10 +77,8 @@ def get_movies_per_imdb():
 
 def get_movies_by_actor_id(id_actor):
     cursor = connect.cursor()
-    query = "SELECT * FROM movies m" \
-        "LEFT JOIN movies_actor ma" \
-        "ON ma.id_movie = m.id" \
-        f"WHERE ma.id_actor = {id_actor}"
+    query = f"""SELECT m.id, m.title, m.duration, m.id_genre, m.imdb FROM movies m
+            LEFT JOIN movie_actor ma ON ma.id_movie = m.id WHERE ma.id_actor = {id_actor}"""
     cursor.execute(query)
     movies = []
     data_manager = cursor.fetchone()

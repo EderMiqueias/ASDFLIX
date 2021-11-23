@@ -10,4 +10,4 @@ from app.controller import MoviesController
 
 @app.errorhandler(404)
 def not_found(error):
-    return {'error': 'not found'}, 404
+    return {'message': 'not found'}, 404
