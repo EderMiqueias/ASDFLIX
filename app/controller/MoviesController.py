@@ -118,8 +118,19 @@ def get_movies_by_actor_id(id_actor):
     if not actor:
         return {
             'error': 'actor is not registered'
-        }, 401
-    print(actor.get_json(), file=sys.stdout)
-    return {
-        'status': 'Filme inexistente!'
-    }
+        }, 400
+    movies = MovieDAO.get_movies_by_actor_id(actor.id)
+    movies = json.dumps([movie.get_json() for movie in movies])
+    return movies
+
+
+@app.route('/movies/genre/<int:id_genre>/')
+def get_movies_by_genre_id(id_genre):
+    genre = GenreDAO.get_genres_by_id(id_genre)
+    if not genre:
+        return {
+            'error': 'genre is not registered'
+        }, 400
+    movies = MovieDAO.get_movies_by_genre_id(genre.id)
+    movies = json.dumps([movie.get_json() for movie in movies])
+    return movies

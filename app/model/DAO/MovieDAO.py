@@ -75,9 +75,12 @@ def get_movies_per_imdb():
     return movies
 
 
-def get_movies_per_actor_id(id_actor):
+def get_movies_by_actor_id(id_actor):
     cursor = connect.cursor()
-    query = "select * from movies where "
+    query = "SELECT * FROM movies m" \
+        "LEFT JOIN movies_actor ma" \
+        "ON ma.id_movie = m.id" \
+        f"WHERE ma.id_actor = {id_actor}"
     cursor.execute(query)
     movies = []
     data_manager = cursor.fetchone()
@@ -86,3 +89,18 @@ def get_movies_per_actor_id(id_actor):
         data_manager = cursor.fetchone()
     cursor.close()
     return movies
+
+
+def get_movies_by_genre_id(id_genre):
+    cursor = connect.cursor()
+    query = "SELECT * FROM movies" \
+        f"WHERE movies.id_genre = {id_genre}"
+    cursor.execute(query)
+    movies = []
+    data_manager = cursor.fetchone()
+    while data_manager:
+        movies.append(MovieVO(data_manager[0], data_manager[1], data_manager[2], data_manager[3], data_manager[4]))
+        data_manager = cursor.fetchone()
+    cursor.close()
+    return movies
+

@@ -21,7 +21,7 @@ def new_genres():
     else:
         return {
             'status': 'Digite os campos adequadamente'
-        }
+        }, 400
 
 
 @app.route('/genres/<int:id>/')
@@ -48,7 +48,7 @@ def update_genres():
             }
     return {
         'status': 'Nao foi possivel atualizar o genero'
-    }
+    }, 400
 
 
 @app.route('/genres/<int:id>/', methods=['DELETE'])
@@ -59,6 +59,6 @@ def delete_genres(id):
             'status': 'Genero deletado!'
         }
     return {
-        'status': 'Error'
-    }
+        'status': 'nao foi possivel deletar o genero'
+    }, 400
 

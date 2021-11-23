@@ -13,14 +13,14 @@ def get_actors():
 
 @app.route('/actors/', methods=['POST'])
 def new_actors():
-    if request.form.get('nome') and request.form.get('nome').isdigit() is not True:
+    if request.form.get('nome') and not request.form.get('nome').isdigit():
         ActorDAO.new_actor(request.form.get('nome'))
         return {
             'status': 'Ator cadastrado com sucesso!'
         }
     return {
         'status': 'Digite os campos adequadamente'
-    }
+    }, 400
 
 
 @app.route('/actors/<int:id>/')
