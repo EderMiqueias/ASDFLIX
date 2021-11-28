@@ -4,7 +4,7 @@ from app.model.DAO import GenreDAO
 from app.model.VO.GenreVO import GenreVO
 
 
-@app.route('/genres/')
+@app.route('/genre/')
 def get_genres():
     genres = GenreDAO.get_all_genres()
     genres = [genre.get_json() for genre in genres]
@@ -14,10 +14,10 @@ def get_genres():
     }
 
 
-@app.route('/genres/', methods=['POST'])
+@app.route('/genre/', methods=['POST'])
 def new_genres():
-    if request.form.get('nome') and request.form.get('nome').isdigit() is not True:
-        GenreDAO.new_genre(request.form.get('nome'))
+    if request.form.get('name') and request.form.get('name').isdigit() is not True:
+        GenreDAO.new_genre(request.form.get('name'))
         return {
             'message': 'Genero cadastrado com sucesso!'
         }, 201
@@ -26,7 +26,14 @@ def new_genres():
     }, 400
 
 
-@app.route('/genres/<int:id>/')
+# def __teste(string):
+#     for char in string:
+#         if 65 >= ord(char) <= 122:
+#             return False
+#     return True
+
+
+@app.route('/genre/<int:id>/')
 def get_genres_by_id(id):
     genre = GenreDAO.get_genres_by_id(id)
     if genre:
@@ -36,17 +43,17 @@ def get_genres_by_id(id):
         }
     return {
         'message': 'Genero inexistente!',
-        'response': {}
+        'response': {} # ?
     }
 
 
-@app.route('/genres/', methods=['PUT'])
+@app.route('/genre/', methods=['PUT'])
 def update_genres():
     id = request.form.get('id')
-    name = request.form.get('nome')
+    name = request.form.get('name')
 
     if id and name:
-        if id.isdigit() and GenreDAO.get_genres_by_id(id) and request.form.get('nome').isdigit() is not True:
+        if id.isdigit() and GenreDAO.get_genres_by_id(id):
             newGenre = GenreVO(id, name)
             GenreDAO.update_genres(newGenre)
             return {
@@ -57,7 +64,7 @@ def update_genres():
     }, 400
 
 
-@app.route('/genres/<int:id>/', methods=['DELETE'])
+@app.route('/genre/<int:id>/', methods=['DELETE'])
 def delete_genres(id):
     if GenreDAO.get_genres_by_id(id):
         GenreDAO.delete_genres(id)

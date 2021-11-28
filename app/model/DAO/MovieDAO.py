@@ -103,13 +103,13 @@ def get_movies_by_actor_id(id_actor):
 
 def get_movies_by_genre_id(id_genre):
     cursor = connect.cursor()
-    query = "SELECT * FROM movies" \
-        f"WHERE movies.id_genre = {id_genre}"
+    query = f"SELECT * FROM movies m WHERE m.id_genre = {id_genre}"
     cursor.execute(query)
     movies = []
     data_manager = cursor.fetchone()
     while data_manager:
-        movies.append(MovieVO(data_manager[0], data_manager[1], data_manager[2], data_manager[3], data_manager[4]))
+        actors = [actor.get_json() for actor in ActorDAO.get_actors_by_movie_id(data_manager[0])]
+        movies.append(MovieVO(data_manager[0], data_manager[1], data_manager[2], data_manager[3], data_manager[4], actors))
         data_manager = cursor.fetchone()
     cursor.close()
     return movies

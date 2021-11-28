@@ -4,7 +4,7 @@ from app.model.VO.MovieVO import MovieVO
 from app.model.DAO import GenreDAO, ActorDAO, MovieDAO
 
 
-@app.route('/movies/')
+@app.route('/movie/')
 def get_movies():
     movies = MovieDAO.get_all_movies()
     movies = [movie.get_json() for movie in movies]
@@ -14,20 +14,20 @@ def get_movies():
     }
 
 
-@app.route('/movies/', methods=['POST'])
+@app.route('/movie/', methods=['POST'])
 def new_movies():
-    title = request.form.get('titulo')
-    duration = (request.form.get('duracao'))
-    id_genre = request.form.get('id_genero')
+    title = request.form.get('title')
+    duration = (request.form.get('duration'))
+    id_genre = request.form.get('id_genre')
     imdb = request.form.get('imdb')
-    actors = request.form.getlist('ator')
+    actors = request.form.getlist('actor')
     validator = True
 
     if title and duration and id_genre and imdb and actors:
         if duration.isdigit() and id_genre.isdigit():
             if not GenreDAO.get_genres_by_id(id_genre):
                 return {
-                    'message': 'Genero inexistente'
+                    'message': 'genre inexistente'
                 }, 400
             try:
                 actors = [int(id_actor) for id_actor in actors]
@@ -40,8 +40,8 @@ def new_movies():
                     return {
                        'message': f'Ator com ID: {id_actor} inexistente'
                     }, 400
-            duration = int(request.form.get('duracao'))
-            id_genre = int(request.form.get('id_genero'))
+            duration = int(request.form.get('duration'))
+            id_genre = int(request.form.get('id_genre'))
             try:
                 imdb = float(imdb)
             except ValueError:
@@ -59,7 +59,7 @@ def new_movies():
     }, 400
 
 
-@app.route('/movies/<int:id>/')
+@app.route('/movie/<int:id>/')
 def get_movies_by_id(id):
     movie = MovieDAO.get_movies_by_id(id)
     if movie:
@@ -73,23 +73,24 @@ def get_movies_by_id(id):
     }
 
 
-@app.route('/movies/', methods=['PUT'])
+@app.route('/movie/', methods=['PUT'])
 def update_movies():
     id = request.form.get('id')
-    title = request.form.get('titulo')
-    duration = (request.form.get('duracao'))
-    id_genre = request.form.get('id_genero')
+    title = request.form.get('title')
+    duration = (request.form.get('duration'))
+    id_genre = request.form.get('id_genre')
     imdb = request.form.get('imdb')
+    actors = request.form.getlist('actor')
     validator = True
 
     if title and duration and id_genre and imdb and id:
         if duration.isdigit() and id_genre.isdigit() and id.isdigit() and MovieDAO.get_movies_by_id(id):
             if not GenreDAO.get_genres_by_id(id_genre):
                 return {
-                    'message': 'Genero inexistente'
+                    'message': 'genre inexistente'
                 }, 400
-            duration = int(request.form.get('duracao'))
-            id_genre = int(request.form.get('id_genero'))
+            duration = int(request.form.get('duration'))
+            id_genre = int(request.form.get('id_genre'))
             try:
                 imdb = float(imdb)
             except ValueError:
@@ -108,8 +109,8 @@ def update_movies():
     }, 400
 
 
-@app.route('/movies/<int:id>', methods=['DELETE'])
-def delete_movies(id):
+@app.route('/movie/<int:id>', methods=['DELETE'])
+def delete_movies(id): # deletar tb de movie actor
     if MovieDAO.get_movies_by_id(id):
         MovieDAO.delete_movies(id)
         return {
@@ -120,7 +121,7 @@ def delete_movies(id):
     }
 
 
-@app.route('/movies/imdb')
+@app.route('/movie/imdb')
 def get_movies_per_imdb():
     movies = MovieDAO.get_movies_per_imdb()
     movies = [movie.get_json() for movie in movies]
@@ -130,7 +131,7 @@ def get_movies_per_imdb():
     }
 
 
-@app.route('/movies/actor/<int:id_actor>/')
+@app.route('/movie/actor/<int:id_actor>/')
 def get_movies_by_actor_id(id_actor):
     actor = ActorDAO.get_actors_by_id(id_actor)
     if not actor:
@@ -151,7 +152,7 @@ def get_movies_by_actor_id(id_actor):
     }
 
 
-@app.route('/movies/genre/<int:id_genre>/')
+@app.route('/movie/genre/<int:id_genre>/')
 def get_movies_by_genre_id(id_genre):
     genre = GenreDAO.get_genres_by_id(id_genre)
     if not genre:
@@ -166,7 +167,6 @@ def get_movies_by_genre_id(id_genre):
             'response': []
         }
     movies = [movie.get_json() for movie in movies]
-    print(movies)
     return {
         'message': 'success',
         'response': movies
