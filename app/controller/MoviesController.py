@@ -20,14 +20,26 @@ def new_movies():
     duration = (request.form.get('duracao'))
     id_genre = request.form.get('id_genero')
     imdb = request.form.get('imdb')
+    actors = request.form.getlist('ator')
     validator = True
 
-    if title and duration and id_genre and imdb:
+    if title and duration and id_genre and imdb and actors:
         if duration.isdigit() and id_genre.isdigit():
             if not GenreDAO.get_genres_by_id(id_genre):
                 return {
                     'message': 'Genero inexistente'
                 }, 400
+            try:
+                actors = [int(id_actor) for id_actor in actors]
+            except ValueError:
+                return {
+                    'message': 'ID do ator deve ser inteiro'
+                }, 400
+            for id_actor in actors:
+                if not ActorDAO.get_actors_by_id(id_actor):
+                    return {
+                       'message': f'Ator com ID: {id_actor} inexistente'
+                    }, 400
             duration = int(request.form.get('duracao'))
             id_genre = int(request.form.get('id_genero'))
             try:
@@ -38,7 +50,7 @@ def new_movies():
             validator = False
 
         if validator:
-            MovieDAO.new_movie(title, duration, id_genre, imdb)
+            MovieDAO.new_movie(title, duration, id_genre, imdb, actors)
             return {
                 'message': 'Filme cadastrado com sucesso!'
             }, 201

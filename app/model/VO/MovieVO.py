@@ -1,10 +1,11 @@
 class MovieVO:
-    def __init__(self, id, title, duration, id_genre, imdb):
+    def __init__(self, id, title, duration, id_genre, imdb, actors):
         self.id = id
         self.title = title
         self.duration = duration
         self.id_genre = id_genre
         self.imdb = imdb
+        self.actors = actors
 
     def get_json(self):
         return dict(
@@ -12,7 +13,8 @@ class MovieVO:
             title=self.title,
             duration=self.duration,
             id_genre=self.id_genre,
-            imdb=self.imdb
+            imdb=self.imdb,
+            actors=self.actors
         )
 
     def getId(self):
@@ -29,3 +31,6 @@ class MovieVO:
 
     def getImdb(self):
         return self.imdb
+    
+    def getactors(self):
+        return self.actors

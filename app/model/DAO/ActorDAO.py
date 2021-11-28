@@ -23,6 +23,20 @@ def get_all_actors():
     return actors
 
 
+def get_actors_by_movie_id(movie_id):
+    cursor = connect.cursor()
+    query = f"""SELECT a.id, a.name FROM actors a
+        LEFT JOIN movie_actor ma ON ma.id_actor = a.id WHERE ma.id_movie = {movie_id}"""
+    cursor.execute(query)
+    actors = []
+    data_manager = cursor.fetchone()
+    while data_manager:
+        actors.append(ActorVO(data_manager[0], data_manager[1]))
+        data_manager = cursor.fetchone()
+    cursor.close()
+    return actors
+
+
 def get_actors_by_id(id):
     cursor = connect.cursor()
     query = f"SELECT * FROM actors where id={id}"
@@ -35,7 +49,7 @@ def get_actors_by_id(id):
     return None
 
 
-def update_actors(newActor): # ta func apenas no navegador
+def update_actors(newActor):
     cursor = connect.cursor()
     query = f"UPDATE actors SET name = '{newActor.getName()}' where id={newActor.getId()}"
     cursor.execute(query)
