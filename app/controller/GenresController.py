@@ -16,7 +16,7 @@ def get_genres():
 
 @app.route('/genre/', methods=['POST'])
 def new_genres():
-    if request.form.get('name') and request.form.get('name').isdigit() is not True:
+    if request.form.get('name') and request.form.get('name').isdigit() is not True and not any(not c.isalnum() for c in request.form.get('name')):
         GenreDAO.new_genre(request.form.get('name'))
         return {
             'message': 'Genero cadastrado com sucesso!'
@@ -53,7 +53,7 @@ def update_genres():
     name = request.form.get('name')
 
     if id and name:
-        if id.isdigit() and GenreDAO.get_genres_by_id(id):
+        if id.isdigit() and GenreDAO.get_genres_by_id(id) and not any(not c.isalnum() for c in name):
             newGenre = GenreVO(id, name)
             GenreDAO.update_genres(newGenre)
             return {
