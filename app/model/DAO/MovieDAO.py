@@ -58,14 +58,25 @@ def update_movies(newMovie):
     query = f"""UPDATE movies SET title = '{newMovie.getTitle()}', duration='{newMovie.getDuration()}',
               id_genre='{newMovie.getIdGenre()}', imdb='{newMovie.getImdb()}' where id={newMovie.getId()}"""
     cursor.execute(query)
+
+    query = f"DELETE FROM movie_actor WHERE id_movie = {newMovie.getId()}"
+    cursor.execute(query)
+
+    add_movie_actor(newMovie.getId(), newMovie.getactors(), cursor)
+
     connect.commit()
     cursor.close()
 
 
-def delete_movies(id):
+def delete_movies(id_movie):
     cursor = connect.cursor()
-    query = f"DELETE FROM movies WHERE id={id}"
+
+    query = f"DELETE FROM movies WHERE id={id_movie}"
     cursor.execute(query)
+
+    query = f"DELETE FROM movie_actor WHERE id_movie = {id_movie};"
+    cursor.execute(query)
+
     connect.commit()
     cursor.close()
 

@@ -2,6 +2,7 @@ from app import app
 from flask import request
 from app.model.VO.MovieVO import MovieVO
 from app.model.DAO import GenreDAO, ActorDAO, MovieDAO
+from app.controller.util import actors_list_is_invalid
 
 
 @app.route('/movie/')
@@ -29,17 +30,9 @@ def new_movies():
                 return {
                     'message': 'genre inexistente'
                 }, 400
-            try:
-                actors = [int(id_actor) for id_actor in actors]
-            except ValueError:
-                return {
-                    'message': 'ID do ator deve ser inteiro'
-                }, 400
-            for id_actor in actors:
-                if not ActorDAO.get_actors_by_id(id_actor):
-                    return {
-                       'message': f'Ator com ID: {id_actor} inexistente'
-                    }, 400
+            actors_is_invalid = actors_list_is_invalid(actors)
+            if actors_is_invalid:
+                return actors_is_invalid
             duration = int(request.form.get('duration'))
             id_genre = int(request.form.get('id_genre'))
             try:
@@ -83,12 +76,15 @@ def update_movies():
     actors = request.form.getlist('actor')
     validator = True
 
-    if title and duration and id_genre and imdb and id:
+    if title and duration and id_genre and imdb and id and actors:
         if duration.isdigit() and id_genre.isdigit() and id.isdigit() and MovieDAO.get_movies_by_id(id):
             if not GenreDAO.get_genres_by_id(id_genre):
                 return {
                     'message': 'genre inexistente'
                 }, 400
+            actors_is_invalid = actors_list_is_invalid(actors)
+            if actors_is_invalid:
+                return actors_is_invalid
             duration = int(request.form.get('duration'))
             id_genre = int(request.form.get('id_genre'))
             try:
@@ -99,7 +95,7 @@ def update_movies():
             validator = False
 
         if validator:
-            newMovie = MovieVO(id, title, duration, id_genre, imdb)
+            newMovie = MovieVO(id, title, duration, id_genre, imdb, actors)
             MovieDAO.update_movies(newMovie)
             return {
                 'message': 'Filme atualizado com sucesso!'
