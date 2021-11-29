@@ -53,7 +53,7 @@ def update_genres():
     name = request.form.get('name')
 
     if id and name:
-        if id.isdigit() and GenreDAO.get_genres_by_id(id) and not any(not c.isalnum() for c in name):
+        if id.isdigit() and not name.isdigit() and GenreDAO.get_genres_by_id(id) and not any(not c.isalnum() for c in name):
             newGenre = GenreVO(id, name)
             GenreDAO.update_genres(newGenre)
             return {

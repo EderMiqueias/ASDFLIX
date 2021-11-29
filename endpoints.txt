@@ -56,13 +56,13 @@ Endpoints:
 	3.5 Deletar por Id - DELETE - /movie/<int:id>/
 
 4 Filmes por Genero
-	4.1 Exibir todos os filmes do genero por id - GET - movies/genre/<int:id>
+	4.1 Exibir todos os filmes do genero por id - GET - movie/genre/<int:id>
 
 5 Filmes por nota IMDB
-	5.1 Exibir todos os filmes ordenados pela maior nota IMDB - GET - movies/imdb
+	5.1 Exibir todos os filmes ordenados pela maior nota IMDB - GET - movie/imdb/
 
 4 Filmes por Ator 
-	4.1 Exibir todos os filmes do ator por id - GET - movies/actor/<int:id>
+	4.1 Exibir todos os filmes do ator por id - GET - movie/actor/<int:id>/
 
 
 

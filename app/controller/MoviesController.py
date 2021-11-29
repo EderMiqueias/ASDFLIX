@@ -117,7 +117,7 @@ def delete_movies(id): # deletar tb de movie actor
     }
 
 
-@app.route('/movie/imdb')
+@app.route('/movie/imdb/')
 def get_movies_per_imdb():
     movies = MovieDAO.get_movies_per_imdb()
     movies = [movie.get_json() for movie in movies]
