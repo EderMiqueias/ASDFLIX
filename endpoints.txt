@@ -61,8 +61,8 @@ Endpoints:
 5 Filmes por nota IMDB
 	5.1 Exibir todos os filmes ordenados pela maior nota IMDB - GET - movie/imdb/
 
-4 Filmes por Ator 
-	4.1 Exibir todos os filmes do ator por id - GET - movie/actor/<int:id>/
+6 Filmes por Ator
+	6.1 Exibir todos os filmes do ator por id - GET - movie/actor/<int:id>/
 
 
 
